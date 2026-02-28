@@ -1,81 +1,156 @@
+[
+  "const"
+  "enum"
+  "extern"
+  "inline"
+  "sizeof"
+  "static"
+  "struct"
+  "typedef"
+  "union"
+  "volatile"
+] @keyword
+
+[
+  "break"
+  "case"
+  "continue"
+  "default"
+  "do"
+  "else"
+  "for"
+  "goto"
+  "if"
+  "return"
+  "switch"
+  "while"
+] @keyword.control
+
+[
+  "#define"
+  "#elif"
+  "#elifdef"
+  "#elifndef"
+  "#else"
+  "#endif"
+  "#if"
+  "#ifdef"
+  "#ifndef"
+  "#include"
+  (preproc_directive)
+] @preproc
+
+[
+  "="
+  "+="
+  "-="
+  "*="
+  "/="
+  "%="
+  "&="
+  "|="
+  "^="
+  "<<="
+  ">>="
+  "++"
+  "--"
+  "+"
+  "-"
+  "*"
+  "/"
+  "%"
+  "~"
+  "&"
+  "|"
+  "^"
+  "<<"
+  ">>"
+  "!"
+  "&&"
+  "||"
+  "=="
+  "!="
+  "<"
+  ">"
+  "<="
+  ">="
+  "->"
+  "?"
+  ":"
+] @operator
+
+[
+  "."
+  ";"
+  ","
+] @punctuation.delimiter
+
+[
+  "{"
+  "}"
+  "("
+  ")"
+  "["
+  "]"
+] @punctuation.bracket
+
+[
+  (string_literal)
+  (system_lib_string)
+  (char_literal)
+] @string
+
+(escape_sequence) @string.escape
+
+(comment) @comment
+
+(number_literal) @number
+
+[
+  (true)
+  (false)
+] @boolean
+
+(null) @constant.builtin
+
 (identifier) @variable
 
 ((identifier) @constant
- (#match? @constant "^[A-Z][A-Z\\d_]*$"))
-
-"break" @keyword
-"case" @keyword
-"const" @keyword
-"continue" @keyword
-"default" @keyword
-"do" @keyword
-"else" @keyword
-"enum" @keyword
-"extern" @keyword
-"for" @keyword
-"if" @keyword
-"inline" @keyword
-"return" @keyword
-"sizeof" @keyword
-"static" @keyword
-"struct" @keyword
-"switch" @keyword
-"typedef" @keyword
-"union" @keyword
-"volatile" @keyword
-"while" @keyword
-
-"#define" @keyword
-"#elif" @keyword
-"#else" @keyword
-"#endif" @keyword
-"#if" @keyword
-"#ifdef" @keyword
-"#ifndef" @keyword
-"#include" @keyword
-(preproc_directive) @keyword
-
-"--" @operator
-"-" @operator
-"-=" @operator
-"->" @operator
-"=" @operator
-"!=" @operator
-"*" @operator
-"&" @operator
-"&&" @operator
-"+" @operator
-"++" @operator
-"+=" @operator
-"<" @operator
-"==" @operator
-">" @operator
-"||" @operator
-
-"." @delimiter
-";" @delimiter
-
-(string_literal) @string
-(system_lib_string) @string
-
-(null) @constant
-(number_literal) @number
-(char_literal) @number
-
-(field_identifier) @property
-(statement_identifier) @label
-(type_identifier) @type
-(primitive_type) @type
-(sized_type_specifier) @type
+  (#match? @constant "^_*[A-Z][A-Z\\d_]*$"))
 
 (call_expression
   function: (identifier) @function)
+
 (call_expression
   function: (field_expression
     field: (field_identifier) @function))
+
 (function_declarator
   declarator: (identifier) @function)
+
 (preproc_function_def
   name: (identifier) @function.special)
 
-(comment) @comment
+(field_identifier) @property
+
+(statement_identifier) @label
+
+[
+  (type_identifier)
+  (primitive_type)
+  (sized_type_specifier)
+] @type
+
+; GNU __attribute__
+(attribute_specifier) @attribute
+
+(attribute_specifier
+  (argument_list
+    (identifier) @attribute))
+
+; C23 [[attributes]]
+(attribute
+  prefix: (identifier) @attribute)
+
+(attribute
+  name: (identifier) @attribute)
